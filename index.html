@@ -3,529 +3,452 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MP3 to YouTube Video Converter - 無料でMP3を動画に変換</title>
-    <meta name="description" content="MP3ファイルを簡単にYouTube用動画に変換。美しいビジュアライザー付きの動画を無料で作成できます。">
+    <title>夢進堂 | 心に届く創作と制作</title>
+    <meta name="description" content="夢進堂は、物語性のある制作と表現でブランドや作品の魅力を引き出すクリエイティブスタジオです。企画・デザイン・映像・Web制作まで一貫してサポートします。">
     <style>
+        :root {
+            color-scheme: light;
+            --primary: #1f3a5f;
+            --secondary: #f4b942;
+            --accent: #d64933;
+            --text: #1a1a1a;
+            --muted: #5e6773;
+            --bg: #f7f5f1;
+            --card: #ffffff;
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
+            font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.7;
         }
 
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 80px 20px;
-            text-align: center;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        a {
+            color: inherit;
+            text-decoration: none;
         }
 
-        .hero-content {
-            max-width: 1200px;
-            width: 100%;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 40px;
-            opacity: 0.9;
-        }
-
-        .converter-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
-            overflow: hidden;
-            margin-top: 40px;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .converter-header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .converter-header h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .converter-content {
-            padding: 40px;
-        }
-
-        .step {
-            margin-bottom: 40px;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.6s ease forwards;
-        }
-
-        .step:nth-child(1) { animation-delay: 0.1s; }
-        .step:nth-child(2) { animation-delay: 0.2s; }
-        .step:nth-child(3) { animation-delay: 0.3s; }
-        .step:nth-child(4) { animation-delay: 0.4s; }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .step-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .step-number {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-right: 20px;
-            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
-        }
-
-        .step-title {
-            font-size: 1.5rem;
-            color: #333;
-            font-weight: 600;
-        }
-
-        .file-input-section {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .upload-area {
-            border: 3px dashed #4facfe;
-            border-radius: 15px;
-            padding: 50px 30px;
-            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4ff 100%);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .upload-area:hover {
-            border-color: #00f2fe;
-            background: linear-gradient(135deg, #f0f7ff 0%, #e0f0ff 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.2);
-        }
-
-        .upload-area.dragover {
-            border-color: #00f2fe;
-            background: linear-gradient(135deg, #e8f4ff 0%, #d0e7ff 100%);
-            transform: scale(1.02);
-        }
-
-        #audioFile {
-            position: absolute;
+        header {
+            position: sticky;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
+            z-index: 10;
+            background: rgba(247, 245, 241, 0.95);
+            backdrop-filter: blur(6px);
+            border-bottom: 1px solid rgba(31, 58, 95, 0.08);
         }
 
-        .upload-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .upload-text {
-            font-size: 1.3rem;
-            color: #333;
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-
-        .upload-subtext {
-            color: #666;
-            font-size: 1rem;
-        }
-
-        .file-info {
-            margin-top: 20px;
-            padding: 20px;
-            background: linear-gradient(135deg, #e8f5e8 0%, #d4f1d4 100%);
-            border-radius: 10px;
-            display: none;
-            border-left: 5px solid #4caf50;
-        }
-
-        .settings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .setting-item {
-            background: #f8f9ff;
-            padding: 20px;
-            border-radius: 10px;
-            border: 2px solid #e0e7ff;
-        }
-
-        .setting-item label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .setting-item select,
-        .setting-item input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background: white;
-            font-size: 1rem;
-        }
-
-        .canvas-container {
-            background: #000;
-            border-radius: 15px;
-            overflow: hidden;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        #visualCanvas {
-            width: 100%;
-            height: 250px;
-            display: block;
-        }
-
-        .controls {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            border: none;
-            padding: 18px 35px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
-            box-shadow: 0 4px 15px rgba(86, 171, 47, 0.4);
-        }
-
-        .btn-success:hover {
-            box-shadow: 0 8px 25px rgba(86, 171, 47, 0.6);
-        }
-
-        .status {
-            text-align: center;
-            padding: 25px;
-            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4ff 100%);
-            border-radius: 15px;
-            margin: 20px 0;
-            font-size: 1.1rem;
-            border: 2px solid #e0e7ff;
-        }
-
-        .progress-container {
-            margin: 30px 0;
-            display: none;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 15px;
-            background: #e0e0e0;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            width: 0%;
-            transition: width 0.3s ease;
-            border-radius: 10px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shine 2s infinite;
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .progress-text {
-            text-align: center;
-            margin-top: 15px;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .features {
-            background: #f8f9fa;
-            padding: 80px 20px;
-            text-align: center;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            max-width: 1200px;
+        .container {
+            width: min(1100px, 90%);
             margin: 0 auto;
         }
 
-        .feature-item {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 0;
         }
 
-        .feature-item:hover {
-            transform: translateY(-5px);
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.2rem;
+            color: var(--primary);
         }
 
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            font-size: 0.95rem;
+            color: var(--muted);
         }
 
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
+        .hero {
+            padding: 90px 0 70px;
+            background: linear-gradient(120deg, rgba(31, 58, 95, 0.08), rgba(244, 185, 66, 0.2));
+        }
+
+        .hero-grid {
+            display: grid;
+            gap: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 3.4vw, 3.4rem);
+            margin-bottom: 18px;
+            color: var(--primary);
+        }
+
+        .hero p {
+            color: var(--muted);
+            margin-bottom: 28px;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 999px;
+            font-weight: 600;
+            border: 1px solid transparent;
+            transition: 0.2s ease;
+        }
+
+        .button.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .button.primary:hover {
+            background: #172c45;
+        }
+
+        .button.ghost {
+            background: transparent;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .hero-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 20px 40px rgba(31, 58, 95, 0.12);
+        }
+
+        .hero-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+        }
+
+        .hero-card ul {
+            list-style: none;
+            display: grid;
+            gap: 12px;
+            color: var(--muted);
+        }
+
+        .hero-card li::before {
+            content: "◆";
+            color: var(--secondary);
+            margin-right: 10px;
+        }
+
+        section {
+            padding: 70px 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 18px;
+            color: var(--primary);
+        }
+
+        .section-lead {
+            color: var(--muted);
+            max-width: 720px;
+        }
+
+        .service-grid,
+        .work-grid,
+        .value-grid {
+            margin-top: 32px;
+            display: grid;
+            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 10px 24px rgba(31, 58, 95, 0.08);
+            border: 1px solid rgba(31, 58, 95, 0.08);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .card p {
+            color: var(--muted);
+        }
+
+        .work-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 999px;
+            background: rgba(244, 185, 66, 0.2);
+            color: #8a5a12;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .process {
+            display: grid;
+            gap: 16px;
+            margin-top: 30px;
+        }
+
+        .process-item {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: 70px 1fr;
+            padding: 18px 20px;
+            background: var(--card);
+            border-radius: 16px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .process-number {
+            font-size: 1.6rem;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .contact {
+            background: var(--primary);
+            color: white;
+        }
+
+        .contact .section-title,
+        .contact .section-lead {
+            color: white;
+        }
+
+        .contact-grid {
+            margin-top: 30px;
+            display: grid;
+            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.12);
+            padding: 22px;
+            border-radius: 16px;
+        }
+
+        .contact-card p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        footer {
+            padding: 30px 0;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        @media (max-width: 720px) {
+            .nav-links {
+                display: none;
             }
-            
-            .hero p {
-                font-size: 1.1rem;
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: flex-start;
             }
-            
-            .converter-content {
-                padding: 20px;
-            }
-            
-            .upload-area {
-                padding: 30px 20px;
-            }
-            
-            .settings-grid {
+
+            .process-item {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <section class="hero">
-        <div class="hero-content">
-            <h1>🎵 MP3 to YouTube Video</h1>
-            <p>MP3ファイルを美しいビジュアライザー付きの動画に変換<br>YouTubeに簡単アップロード！</p>
-            
-            <div class="converter-container">
-                <div class="converter-header">
-                    <h2>🚀 無料で簡単変換</h2>
-                    <p>ドラッグ&ドロップするだけ！</p>
+    <header>
+        <div class="container nav">
+            <div class="logo">夢進堂</div>
+            <nav class="nav-links">
+                <a href="#about">私たちについて</a>
+                <a href="#service">サービス</a>
+                <a href="#works">制作実績</a>
+                <a href="#contact">お問い合わせ</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-grid">
+                <div>
+                    <h1>心に届く物語と体験を、夢進堂から。</h1>
+                    <p>夢進堂は「想いを丁寧に紡ぐこと」を大切に、企画・デザイン・映像・Web制作を一貫して支えるクリエイティブスタジオです。ブランドの世界観づくりから、ファンに届く体験設計まで伴走します。</p>
+                    <div class="hero-actions">
+                        <a class="button primary" href="#contact">相談してみる</a>
+                        <a class="button ghost" href="#works">制作例を見る</a>
+                    </div>
                 </div>
-                
-                <div class="converter-content">
-                    <!-- ステップ1: ファイル選択 -->
-                    <div class="step">
-                        <div class="step-header">
-                            <div class="step-number">1</div>
-                            <div class="step-title">MP3ファイルを選択</div>
-                        </div>
-                        
-                        <div class="file-input-section">
-                            <div class="upload-area" id="uploadArea">
-                                <input type="file" id="audioFile" accept=".mp3,.wav,.m4a">
-                                <div class="upload-icon">🎵</div>
-                                <div class="upload-text">MP3ファイルをここにドロップ<br>またはクリックして選択</div>
-                                <div class="upload-subtext">対応形式: MP3, WAV, M4A (最大100MB)</div>
-                            </div>
-                            
-                            <div id="fileInfo" class="file-info">
-                                <div id="fileName"></div>
-                                <div id="fileSize"></div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="hero-card">
+                    <h3>夢進堂の強み</h3>
+                    <ul>
+                        <li>想いを引き出す丁寧なヒアリングと企画設計</li>
+                        <li>言葉・映像・デザインを統合した表現設計</li>
+                        <li>小さなチームだからこその柔軟な伴走体制</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
-                    <!-- ステップ2: 設定 -->
-                    <div class="step">
-                        <div class="step-header">
-                            <div class="step-number">2</div>
-                            <div class="step-title">動画設定をカスタマイズ</div>
-                        </div>
-                        
-                        <div class="settings-grid">
-                            <div class="setting-item">
-                                <label for="visualStyle">🎨 ビジュアルスタイル</label>
-                                <select id="visualStyle">
-                                    <option value="spectrum">スペクトラムアナライザー</option>
-                                    <option value="waveform">波形表示</option>
-                                    <option value="particles">パーティクル</option>
-                                    <option value="bars">3Dバー</option>
-                                </select>
-                            </div>
-                            
-                            <div class="setting-item">
-                                <label for="colorTheme">🌈 カラーテーマ</label>
-                                <select id="colorTheme">
-                                    <option value="rainbow">レインボー</option>
-                                    <option value="neon">ネオン</option>
-                                    <option value="ocean">オーシャン</option>
-                                    <option value="fire">ファイア</option>
-                                </select>
-                            </div>
-                            
-                            <div class="setting-item">
-                                <label for="backgroundColor">🎨 背景色</label>
-                                <input type="color" id="backgroundColor" value="#000000">
-                            </div>
-                            
-                            <div class="setting-item">
-                                <label for="videoTitle">📝 動画タイトル</label>
-                                <input type="text" id="videoTitle" placeholder="楽曲名を入力...">
-                            </div>
-                        </div>
+        <section id="about">
+            <div class="container">
+                <h2 class="section-title">私たちについて</h2>
+                <p class="section-lead">夢進堂は、ブランドや作品に宿る「らしさ」を言語化し、視覚・体験へと翻訳するクリエイティブチームです。背景にある想いを丁寧にすくい上げ、伝わる形に整えていきます。</p>
+                <div class="value-grid">
+                    <div class="card">
+                        <h3>丁寧な伴走</h3>
+                        <p>初回相談から納品後のフォローまで、プロジェクトの目的や課題に合わせて柔軟にサポートします。</p>
                     </div>
-
-                    <!-- ステップ3: プレビュー -->
-                    <div class="step">
-                        <div class="step-header">
-                            <div class="step-number">3</div>
-                            <div class="step-title">プレビュー確認</div>
-                        </div>
-                        
-                        <div class="canvas-container">
-                            <canvas id="visualCanvas" width="800" height="250"></canvas>
-                        </div>
-                        
-                        <div class="controls">
-                            <button id="previewBtn" class="btn">🔍 プレビュー再生</button>
-                            <button id="stopBtn" class="btn">⏹️ 停止</button>
-                        </div>
+                    <div class="card">
+                        <h3>世界観づくり</h3>
+                        <p>言葉・ビジュアル・体験を統合し、ブランドの物語が一貫する設計を行います。</p>
                     </div>
-
-                    <!-- ステップ4: 変換 -->
-                    <div class="step">
-                        <div class="step-header">
-                            <div class="step-number">4</div>
-                            <div class="step-title">動画変換・ダウンロード</div>
-                        </div>
-                        
-                        <div class="controls">
-                            <button id="convertBtn" class="btn" disabled>🎬 動画に変換開始</button>
-                            <button id="downloadBtn" class="btn btn-success hidden">💾 動画をダウンロード</button>
-                        </div>
-                        
-                        <div id="status" class="status">
-                            MP3ファイルを選択してください
-                        </div>
-                        
-                        <div id="progressContainer" class="progress-container">
-                            <div class="progress-bar">
-                                <div id="progressFill" class="progress-fill"></div>
-                            </div>
-                            <div id="progressText" class="progress-text">0%</div>
-                        </div>
+                    <div class="card">
+                        <h3>多面的な制作</h3>
+                        <p>企画、コピー、グラフィック、映像、Webまで幅広く対応し、一つの窓口で完結します。</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="features">
-        <h2 style="font-size: 2.5rem; margin-bottom: 50px; color: #333;">✨ 主な機能</h2>
-        <div class="features-grid">
-            <div class="feature-item">
-                <div class="feature-icon">🎨</div>
-                <h3>美しいビジュアライザー</h3>
-                <p>音楽に合わせてリアルタイムで動く美しいビジュアルエフェクト</p>
+        <section id="service">
+            <div class="container">
+                <h2 class="section-title">サービス</h2>
+                <p class="section-lead">夢進堂では、目的に合わせたプランニングから制作・運用までを一貫してご提案します。</p>
+                <div class="service-grid">
+                    <div class="card">
+                        <h3>ブランド/コンセプト設計</h3>
+                        <p>企業や作品の背景を整理し、ストーリー・コピー・世界観を言語化します。</p>
+                    </div>
+                    <div class="card">
+                        <h3>Web・LP制作</h3>
+                        <p>情報設計からUI/UXまで、伝わるサイトを設計し、運用しやすい形で納品します。</p>
+                    </div>
+                    <div class="card">
+                        <h3>映像・ビジュアル制作</h3>
+                        <p>PVやモーションなど、視覚的に訴求する映像表現でファンとの接点をつくります。</p>
+                    </div>
+                    <div class="card">
+                        <h3>クリエイティブ伴走</h3>
+                        <p>継続的な広報やSNS運用の相談など、チームの一員として支援します。</p>
+                    </div>
+                </div>
             </div>
-            <div class="feature-item">
-                <div class="feature-icon">🚀</div>
-                <h3>高速変換</h3>
-                <p>最新技術により、数秒でYouTube対応動画に変換</p>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">💯</div>
-                <h3>完全無料</h3>
-                <p>登録不要、制限なし。すべての機能を無料で利用可能</p>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <script src="app.js"></script>
+        <section id="works">
+            <div class="container">
+                <h2 class="section-title">制作実績</h2>
+                <p class="section-lead">実績は守秘義務により一部のみご紹介しています。詳細はお問い合わせください。</p>
+                <div class="work-grid">
+                    <div class="card work-card">
+                        <span class="tag">ブランド設計</span>
+                        <h3>クラフトブランドの世界観刷新</h3>
+                        <p>ブランドストーリーとビジュアルガイドを整え、リブランディングの方向性を策定。</p>
+                    </div>
+                    <div class="card work-card">
+                        <span class="tag">Web / UI</span>
+                        <h3>アーティスト公式サイト</h3>
+                        <p>楽曲の魅力が伝わる情報設計と、更新しやすいCMS導入を支援。</p>
+                    </div>
+                    <div class="card work-card">
+                        <span class="tag">映像制作</span>
+                        <h3>イベントプロモーションムービー</h3>
+                        <p>企画・撮影・編集までを一貫して担当。SNSでの拡散を意識した構成。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <h2 class="section-title">制作の流れ</h2>
+                <p class="section-lead">はじめての方にも安心いただけるよう、わかりやすいステップで進めます。</p>
+                <div class="process">
+                    <div class="process-item">
+                        <div class="process-number">01</div>
+                        <div>
+                            <h3>ヒアリング</h3>
+                            <p>課題や目的を共有し、プロジェクトの方向性を整理します。</p>
+                        </div>
+                    </div>
+                    <div class="process-item">
+                        <div class="process-number">02</div>
+                        <div>
+                            <h3>企画・設計</h3>
+                            <p>コンセプトやストーリーを構築し、制作物の骨格を整えます。</p>
+                        </div>
+                    </div>
+                    <div class="process-item">
+                        <div class="process-number">03</div>
+                        <div>
+                            <h3>制作・調整</h3>
+                            <p>デザインや映像を制作し、フィードバックを受けて磨き上げます。</p>
+                        </div>
+                    </div>
+                    <div class="process-item">
+                        <div class="process-number">04</div>
+                        <div>
+                            <h3>納品・伴走</h3>
+                            <p>運用開始後も必要に応じて改善提案やサポートを行います。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <div class="container">
+                <h2 class="section-title">お問い合わせ</h2>
+                <p class="section-lead">ご相談はオンライン・対面どちらでも対応可能です。お気軽にお問い合わせください。</p>
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <h3>相談窓口</h3>
+                        <p>メール: info@yumeshindo.jp</p>
+                        <p>受付時間: 平日 10:00-18:00</p>
+                    </div>
+                    <div class="contact-card">
+                        <h3>所在地</h3>
+                        <p>東京都内を拠点に全国対応</p>
+                        <p>オンラインミーティングも可能です。</p>
+                    </div>
+                    <div class="contact-card">
+                        <h3>ご相談内容例</h3>
+                        <p>・ブランドの立ち上げや刷新</p>
+                        <p>・作品やイベントのプロモーション</p>
+                        <p>・Webサイト、LPの制作相談</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">© 2024 夢進堂 All Rights Reserved.</div>
+    </footer>
 </body>
 </html>
